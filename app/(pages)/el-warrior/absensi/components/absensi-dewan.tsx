@@ -20,12 +20,20 @@ const AbsensiDewan = () => {
   const { data: userList } = useUserList();
   const users = userList?.data?.users || [];
 
-  const { data: absensiData, isLoading: isLoadingAbsensi } = useAbsensi(userId);
+  const {
+    data: absensiData,
+    isLoading: isLoadingAbsensi,
+    refetch,
+  } = useAbsensi(userId);
   const absensiList = absensiData?.data;
 
   useEffect(() => {
     setUserId(userInfo?.data?.user?.id);
   }, [userInfo]);
+
+  useEffect(() => {
+    refetch();
+  }, [userId]);
 
   const isLoading = isUserInfoLoading || isLoadingAbsensi;
 
@@ -46,7 +54,7 @@ const AbsensiDewan = () => {
             value: user.id,
             label: user.email,
           }))}
-          onChange={(value) => console.log(value)}
+          onChange={(value) => setUserId(value)}
         />
 
         {isLoading && <Spin size="large" />}
